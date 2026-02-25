@@ -53,4 +53,10 @@ If you prefer to set this up manually, we have provided templates in the `/examp
 
 ---
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=blacksiders/SkillPointer&type=Date)](https://star-history.com/#blacksiders/SkillPointer&Date)
+
+---
+
 *Open-sourced to optimize AI environments for developers everywhere. Built by breaking the limits of agentic workflows.*

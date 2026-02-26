@@ -52,7 +52,7 @@
       
       <text x="130" y="80" class="text-normal" text-anchor="middle">Base Context Window:</text>
       <!-- Giant Pulsing Red Number -->
-      <text x="130" y="115" class="text-strong-red pulse" text-anchor="middle">120,540 Tokens</text>
+      <text x="130" y="115" class="text-strong-red pulse" text-anchor="middle">~80,000 Tokens</text>
       
       <!-- Abstract bars showing overload -->
       <rect x="40" y="140" width="180" height="8" rx="4" fill="#ef4444" />
@@ -78,18 +78,18 @@
       
       <text x="130" y="80" class="text-normal" text-anchor="middle">Base Context Window:</text>
       <!-- Tiny Blue Number -->
-      <text x="130" y="115" class="text-strong-blue" text-anchor="middle">85 Tokens</text>
+      <text x="130" y="115" class="text-strong-blue" text-anchor="middle">~255 Tokens</text>
       
       <!-- The Pointer abstraction -->
       <rect x="40" y="140" width="180" height="34" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
-      <text x="130" y="162" class="text-small" text-anchor="middle">10 Dynamic Category Pointers</text>
+      <text x="130" y="162" class="text-small" text-anchor="middle">35 Dynamic Category Pointers</text>
 
       <!-- Data extraction arrow -->
       <path d="M 130 174 L 130 195" stroke="#38bdf8" stroke-width="2" fill="none" class="dash-anim" />
       <polygon points="126,192 134,192 130,198" fill="#38bdf8" />
       
       <!-- Hidden Vault abstraction -->
-      <text x="130" y="210" font-family='"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace' font-size="14" font-weight="bold" fill="#38bdf8" text-anchor="middle">2,000+ Skills in Vault</text>
+      <text x="130" y="210" font-family='"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace' font-size="14" font-weight="bold" fill="#38bdf8" text-anchor="middle">2,004 Skills in Vault</text>
     </g>
   </g>
 </svg>

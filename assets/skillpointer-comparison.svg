@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" width="900" height="720">
+  <defs>
+    <style>
+      .font-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 800; fill: #94a3b8; letter-spacing: 2px; }
+      .font-heading { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; }
+      .font-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #94a3b8; font-weight: 600; }
+      .font-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #94a3b8; }
+      .font-mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 11px; fill: #94a3b8; }
+      .font-big-num { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 28px; font-weight: bold; }
+      .font-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 10px; fill: #64748b; font-weight: 600; }
+      .font-tiny { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 9px; fill: #475569; }
+      .font-italic { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #64748b; font-style: italic; }
+      .font-step { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #38bdf8; font-weight: 700; }
+
+      .pulse-red { animation: pulseR 2.5s ease-in-out infinite; }
+      .pulse-blue { animation: pulseB 3s ease-in-out infinite; }
+      .flow { stroke-dasharray: 6 4; animation: flowDash 1.5s linear infinite; }
+      .blink { animation: blink 2s ease-in-out infinite; }
+
+      @keyframes pulseR { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+      @keyframes pulseB { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+      @keyframes blink { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+      @keyframes flowDash { to { stroke-dashoffset: -20; } }
+    </style>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="redFill" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <linearGradient id="blueFill" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="720" rx="16" fill="url(#bgGrad)" />
+  <rect width="900" height="720" rx="16" fill="none" stroke="#1e293b" stroke-width="2" />
+
+  <!-- Title -->
+  <text x="450" y="36" class="font-title" text-anchor="middle">WHY SKILLPOINTER WORKS</text>
+  <text x="450" y="56" class="font-sub" text-anchor="middle">Real data: 2,004 skills across 34 categories measured from a live environment</text>
+
+  <!-- ═══════════════════ CENTER DIVIDER ═══════════════════ -->
+  <line x1="450" y1="70" x2="450" y2="475" stroke="#334155" stroke-width="2" stroke-dasharray="6" />
+
+  <!-- ═══════════════════ LEFT SIDE: WITHOUT ═══════════════════ -->
+  <text x="225" y="88" class="font-heading" text-anchor="middle" fill="#ef4444">❌  WITHOUT SkillPointer</text>
+  <text x="225" y="104" class="font-label" text-anchor="middle">Agent scans 2,004 skill descriptions at startup</text>
+
+  <!-- Box: What Happens -->
+  <rect x="25" y="115" width="410" height="245" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1.5" opacity="0.8" />
+  <text x="40" y="136" class="font-sub" fill="#f87171">HOW AI AGENTS LOAD SKILLS (3-Level System)</text>
+
+  <!-- Level 1 box -->
+  <rect x="38" y="145" width="384" height="60" rx="6" fill="#1e293b" stroke="#ef4444" stroke-width="1" />
+  <text x="48" y="162" class="font-label" fill="#f87171">LEVEL 1 — STARTUP (happens automatically)</text>
+  <text x="48" y="176" class="font-body" fill="#cbd5e1">Agent reads name + description of EVERY skill into system prompt</text>
+  <text x="48" y="190" class="font-mono" fill="#f87171">2,004 descriptions × ~161 chars = ~80,000 tokens loaded</text>
+
+  <!-- Level 2 box -->
+  <rect x="38" y="212" width="384" height="50" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
+  <text x="48" y="229" class="font-label" fill="#94a3b8">LEVEL 2 — ON DEMAND (when skill matches your task)</text>
+  <text x="48" y="243" class="font-body" fill="#94a3b8">Full SKILL.md body loaded only when AI decides it's relevant</text>
+
+  <!-- Level 3 box -->
+  <rect x="38" y="269" width="384" height="42" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
+  <text x="48" y="286" class="font-label" fill="#64748b">LEVEL 3 — DEEP LOAD (scripts, templates, referenced files)</text>
+  <text x="48" y="299" class="font-body" fill="#64748b">Additional resources loaded only when explicitly needed</text>
+
+  <!-- The problem highlight -->
+  <rect x="38" y="320" width="384" height="30" rx="6" fill="#ef4444" opacity="0.15" stroke="#ef4444" stroke-width="1" />
+  <text x="230" y="340" class="font-body" text-anchor="middle" fill="#f87171" font-weight="bold">⚠ The problem is Level 1: 80,000 tokens before you even type</text>
+
+  <!-- Result box (left) -->
+  <rect x="25" y="370" width="410" height="100" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1.5" opacity="0.6" />
+  <text x="40" y="390" class="font-sub" fill="#f87171">THE COST WITH 2,004 SKILLS</text>
+  <text x="40" y="407" class="font-body" fill="#fca5a5">⚠ ~80K tokens consumed just listing skill descriptions</text>
+  <text x="40" y="422" class="font-body" fill="#fca5a5">⚠ AI wastes time parsing 2,004 irrelevant summaries</text>
+  <text x="40" y="437" class="font-body" fill="#fca5a5">⚠ With 200K context window: 40% gone before you start</text>
+  <text x="40" y="457" class="font-italic">That's 80K tokens of "I know about CSS buttons" that you</text>
+  <text x="40" y="467" class="font-italic">never asked about — on every single conversation</text>
+
+  <!-- ═══════════════════ RIGHT SIDE: WITH ═══════════════════ -->
+  <text x="675" y="88" class="font-heading" text-anchor="middle" fill="#38bdf8">✅  WITH SkillPointer</text>
+  <text x="675" y="104" class="font-label" text-anchor="middle">Agent sees only 35 pointer descriptions at startup</text>
+
+  <!-- Box: What Happens -->
+  <rect x="465" y="115" width="410" height="245" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" opacity="0.8" />
+  <text x="480" y="136" class="font-sub" fill="#38bdf8">SAME 3-LEVEL SYSTEM — BUT OPTIMIZED</text>
+
+  <!-- Level 1 box (pointer) -->
+  <rect x="478" y="145" width="384" height="60" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+  <text x="488" y="162" class="font-label" fill="#38bdf8">LEVEL 1 — STARTUP (only pointers scanned)</text>
+  <text x="488" y="176" class="font-body" fill="#cbd5e1">Agent reads 35 pointer names + descriptions (not 2,004!)</text>
+  <text x="488" y="190" class="font-mono" fill="#38bdf8">35 pointers × ~29 chars = ~255 tokens loaded ✦</text>
+
+  <!-- Level 2 box (pointer body) -->
+  <rect x="478" y="212" width="384" height="50" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+  <text x="488" y="229" class="font-label" fill="#38bdf8">LEVEL 2 — AI reads the matched pointer body</text>
+  <text x="488" y="243" class="font-body" fill="#cbd5e1">Pointer says: "Go browse ~/.opencode-skill-libraries/security/"</text>
+
+  <!-- Level 3 box (actual skill from vault) -->
+  <rect x="478" y="269" width="384" height="42" rx="6" fill="#1e293b" stroke="#4ade80" stroke-width="1" />
+  <text x="488" y="286" class="font-label" fill="#4ade80">LEVEL 3 — AI reads the EXACT skill from the vault</text>
+  <text x="488" y="299" class="font-body" fill="#4ade80">Uses list_dir + view_file to get ONLY the one file it needs</text>
+
+  <!-- The win highlight -->
+  <rect x="478" y="320" width="384" height="30" rx="6" fill="#38bdf8" opacity="0.15" stroke="#38bdf8" stroke-width="1" />
+  <text x="670" y="340" class="font-body" text-anchor="middle" fill="#38bdf8" font-weight="bold">✦ Level 1 reduced from 80,000 tokens → 255 tokens (99.7%)</text>
+
+  <!-- Result box (right) -->
+  <rect x="465" y="370" width="410" height="100" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" opacity="0.6" />
+  <text x="480" y="390" class="font-sub" fill="#38bdf8">THE WIN WITH SKILLPOINTER</text>
+  <text x="480" y="407" class="font-body" fill="#7dd3fc">✦ 255 tokens at startup instead of 80,000 (99.7% reduction)</text>
+  <text x="480" y="422" class="font-body" fill="#7dd3fc">✦ AI still accesses all 2,004 skills — via on-demand retrieval</text>
+  <text x="480" y="437" class="font-body" fill="#7dd3fc">✦ Works with the agent's native tools — no plugins needed</text>
+  <text x="480" y="457" class="font-italic" fill="#38bdf8">35 pointers let the AI find any skill from any category,</text>
+  <text x="480" y="467" class="font-italic" fill="#38bdf8">using tools it already has: list_dir, view_file ↓</text>
+
+  <!-- ═══════════════════ BOTTOM: HOW IT WORKS ═══════════════════ -->
+  <rect x="25" y="490" width="850" height="210" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+  <text x="450" y="516" class="font-heading" text-anchor="middle" fill="#38bdf8">🔑  The Retrieval Flow (what happens when you ask a question)</text>
+  <text x="450" y="535" class="font-body" text-anchor="middle" fill="#94a3b8">The AI matches a pointer description → reads the pointer → follows its instructions → retrieves the exact skill</text>
+
+  <!-- Step 1 -->
+  <g transform="translate(42, 553)">
+    <rect x="0" y="0" width="140" height="52" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+    <text x="70" y="16" class="font-step" text-anchor="middle">STEP 1</text>
+    <text x="70" y="30" class="font-body" text-anchor="middle" fill="#cbd5e1">You ask: "Add JWT</text>
+    <text x="70" y="42" class="font-body" text-anchor="middle" fill="#cbd5e1">auth to my API"</text>
+  </g>
+  <line x1="190" y1="579" x2="215" y2="579" stroke="#38bdf8" stroke-width="2" class="flow" />
+  <polygon points="211,574 221,579 211,584" fill="#38bdf8" />
+
+  <!-- Step 2 -->
+  <g transform="translate(222, 553)">
+    <rect x="0" y="0" width="155" height="52" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="77" y="16" class="font-step" text-anchor="middle">STEP 2 — Auto</text>
+    <text x="77" y="30" class="font-body" text-anchor="middle" fill="#cbd5e1">AI matches description:</text>
+    <text x="77" y="42" class="font-mono" text-anchor="middle" fill="#38bdf8">📌 security-category</text>
+  </g>
+  <line x1="385" y1="579" x2="410" y2="579" stroke="#38bdf8" stroke-width="2" class="flow" />
+  <polygon points="406,574 416,579 406,584" fill="#38bdf8" />
+
+  <!-- Step 3 -->
+  <g transform="translate(417, 553)">
+    <rect x="0" y="0" width="155" height="52" rx="8" fill="#1e293b" stroke="#0ea5e9" stroke-width="1.5" />
+    <text x="77" y="16" class="font-step" text-anchor="middle">STEP 3 — Browse</text>
+    <text x="77" y="30" class="font-body" text-anchor="middle" fill="#cbd5e1">Pointer tells AI to run:</text>
+    <text x="77" y="42" class="font-mono" text-anchor="middle" fill="#0ea5e9">list_dir(vault/security/)</text>
+  </g>
+  <line x1="580" y1="579" x2="605" y2="579" stroke="#4ade80" stroke-width="2" class="flow" />
+  <polygon points="601,574 611,579 601,584" fill="#4ade80" />
+
+  <!-- Step 4 -->
+  <g transform="translate(612, 553)">
+    <rect x="0" y="0" width="250" height="52" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5" />
+    <text x="125" y="16" class="font-step" text-anchor="middle" fill="#4ade80">STEP 4 — Precision Load</text>
+    <text x="125" y="30" class="font-body" text-anchor="middle" fill="#cbd5e1">AI reads ONLY jwt-auth-best-practices.md</text>
+    <text x="125" y="42" class="font-mono" text-anchor="middle" fill="#4ade80">1 of 2,004 skills → expert-level code ✓</text>
+  </g>
+
+  <!-- Key insight -->
+  <rect x="65" y="625" width="770" height="55" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1" />
+  <text x="450" y="645" class="font-body" text-anchor="middle" fill="#cbd5e1">
+    💡  AI agents already use <tspan fill="#38bdf8" font-weight="bold">progressive disclosure</tspan> — they only load Level 1 metadata at startup.
+  </text>
+  <text x="450" y="660" class="font-body" text-anchor="middle" fill="#cbd5e1">
+    SkillPointer replaces 2,004 Level 1 entries with 35 pointers. Same access to every skill, <tspan fill="#38bdf8" font-weight="bold">99.7% less startup cost</tspan>.
+  </text>
+  <text x="450" y="675" class="font-body" text-anchor="middle" fill="#64748b">
+    No new tools needed — pointers instruct the AI to use its native list_dir + view_file to retrieve from the hidden vault.
+  </text>
+
+</svg>

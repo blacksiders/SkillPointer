@@ -182,6 +182,6 @@
   <text x="740" y="660" class="t-label" text-anchor="middle" fill="#4ade80" font-style="italic">secure, tested, production-ready</text>
 
   <!-- Bottom tagline -->
-  <text x="450" y="705" class="t-sub" text-anchor="middle" fill="#64748b">Context used: ~85 tokens (pointer only) instead of ~120,000 tokens (all skills loaded)</text>
+  <text x="450" y="705" class="t-sub" text-anchor="middle" fill="#64748b">Startup context: ~255 tokens (35 pointers) instead of ~80,000 tokens (2,004 skill descriptions) — 99.7% reduction</text>
 
 </svg>

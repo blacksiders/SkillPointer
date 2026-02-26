@@ -1,8 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" width="800" height="360">
   <defs>
     <style>
-      .glow-red { filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5)); }
-      .glow-blue { filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7)); }
+      .glow-red { stroke: #ef4444; stroke-width: 3px; }
+      .glow-blue { stroke: #38bdf8; stroke-width: 3px; }
+      .text-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 600; fill: #94a3b8; letter-spacing: 2px; }
+      .text-box-title-red { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #f87171; }
+      .text-box-title-blue { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #38bdf8; }
+      .text-normal { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 14px; fill: #94a3b8; }
+      .text-strong-red { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 28px; font-weight: bold; fill: #ef4444; }
+      .text-strong-blue { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 28px; font-weight: bold; fill: #38bdf8; }
+      .text-small { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 600; fill: #cbd5e1; }
+      .text-vs { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #cbd5e1; }
       .float { animation: float 6s ease-in-out infinite; }
       .float-delay { animation: float 6s ease-in-out 1.5s infinite; }
       .pulse { animation: pulse 3s infinite; }
@@ -14,9 +22,9 @@
         100% { transform: translateY(0px); } 
       }
       @keyframes pulse { 
-        0% { opacity: 0.6; transform: scale(0.98); } 
-        50% { opacity: 1; transform: scale(1.02); } 
-        100% { opacity: 0.6; transform: scale(0.98); } 
+        0% { opacity: 0.6; } 
+        50% { opacity: 1; } 
+        100% { opacity: 0.6; } 
       }
       @keyframes dash { 
         to { stroke-dashoffset: -16; } 
@@ -27,16 +35,6 @@
       <stop offset="0%" stop-color="#020617" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-    
-    <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#991b1b" />
-      <stop offset="100%" stop-color="#ef4444" />
-    </linearGradient>
-
-    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7" />
-      <stop offset="100%" stop-color="#38bdf8" />
-    </linearGradient>
   </defs>
 
   <!-- Background -->
@@ -44,16 +42,16 @@
   <rect width="800" height="360" rx="16" fill="none" stroke="#1e293b" stroke-width="2" />
 
   <!-- Title -->
-  <text x="400" y="40" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle" letter-spacing="2">THE CONTEXT PROBLEM</text>
+  <text x="400" y="40" class="text-title" text-anchor="middle">THE CONTEXT PROBLEM</text>
 
   <!-- LEFT: The Old Way (Bloated) -->
   <g transform="translate(60, 90)" class="float">
-    <rect width="260" height="220" rx="12" fill="#0f172a" stroke="#ef4444" stroke-width="2" class="glow-red" />
-    <text x="130" y="40" fill="#f87171" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" text-anchor="middle">Standard Agent Model</text>
+    <rect width="260" height="220" rx="12" fill="#0f172a" class="glow-red" />
+    <text x="130" y="40" class="text-box-title-red" text-anchor="middle">Standard Agent Model</text>
     
-    <text x="130" y="80" fill="#94a3b8" font-family="monospace" font-size="14" text-anchor="middle">Base Context Window:</text>
+    <text x="130" y="80" class="text-normal" text-anchor="middle">Base Context Window:</text>
     <!-- Giant Pulsing Red Number -->
-    <text x="130" y="115" fill="#ef4444" font-family="monospace" font-size="28" font-weight="bold" text-anchor="middle" class="pulse">120,540 Tokens</text>
+    <text x="130" y="115" class="text-strong-red pulse" text-anchor="middle">120,540 Tokens</text>
     
     <!-- Abstract bars showing overload -->
     <rect x="40" y="140" width="180" height="8" rx="4" fill="#ef4444" />
@@ -61,33 +59,33 @@
     <rect x="40" y="180" width="170" height="8" rx="4" fill="#ef4444" opacity="0.6"/>
     
     <path d="M 10 210 L 250 210" stroke="#ef4444" stroke-width="4" stroke-linecap="round" opacity="0.4" />
-    <text x="130" y="198" fill="#f87171" font-family="system-ui" font-size="12" font-weight="bold" text-anchor="middle">Slow, Expensive &amp; Distracted</text>
+    <text x="130" y="198" class="text-small" fill="#f87171" text-anchor="middle">Slow, Expensive &amp; Distracted</text>
   </g>
 
   <!-- MIDDLE: The Divider -->
   <line x1="400" y1="90" x2="400" y2="310" stroke="#334155" stroke-width="2" stroke-dasharray="6" />
   <circle cx="400" cy="200" r="24" fill="#1e293b" stroke="#334155" stroke-width="2" />
-  <text x="400" y="206" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">VS</text>
+  <text x="400" y="206" class="text-vs" text-anchor="middle">VS</text>
 
   <!-- RIGHT: SkillPointer (Optimized) -->
   <g transform="translate(480, 90)" class="float-delay">
-    <rect width="260" height="220" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2" class="glow-blue" />
+    <rect width="260" height="220" rx="12" fill="#0f172a" class="glow-blue" />
     
-    <text x="130" y="40" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" text-anchor="middle">SkillPointer Architecture</text>
+    <text x="130" y="40" class="text-box-title-blue" text-anchor="middle">SkillPointer Architecture</text>
     
-    <text x="130" y="80" fill="#94a3b8" font-family="monospace" font-size="14" text-anchor="middle">Base Context Window:</text>
+    <text x="130" y="80" class="text-normal" text-anchor="middle">Base Context Window:</text>
     <!-- Tiny Blue Number -->
-    <text x="130" y="115" fill="#38bdf8" font-family="monospace" font-size="28" font-weight="bold" text-anchor="middle">85 Tokens</text>
+    <text x="130" y="115" class="text-strong-blue" text-anchor="middle">85 Tokens</text>
     
     <!-- The Pointer abstraction -->
     <rect x="40" y="140" width="180" height="34" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
-    <text x="130" y="162" fill="#cbd5e1" font-family="system-ui" font-size="12" font-weight="600" text-anchor="middle">10 Dynamic Category Pointers</text>
+    <text x="130" y="162" class="text-small" text-anchor="middle">10 Dynamic Category Pointers</text>
 
     <!-- Data extraction arrow -->
-    <path d="M 130 174 L 130 195" stroke="#38bdf8" stroke-width="2" class="dash-anim" />
+    <path d="M 130 174 L 130 195" stroke="#38bdf8" stroke-width="2" fill="none" class="dash-anim" />
     <polygon points="126,192 134,192 130,198" fill="#38bdf8" />
     
     <!-- Hidden Vault abstraction -->
-    <text x="130" y="210" fill="#38bdf8" font-family="monospace" font-size="14" font-weight="bold" text-anchor="middle">2,000+ Skills in Vault</text>
+    <text x="130" y="210" font-family='"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace' font-size="14" font-weight="bold" fill="#38bdf8" text-anchor="middle">2,000+ Skills in Vault</text>
   </g>
 </svg>

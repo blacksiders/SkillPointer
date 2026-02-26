@@ -1,200 +1,187 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" width="900" height="720">
   <defs>
     <style>
-      .text-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 800; fill: #38bdf8; letter-spacing: 1px; }
-      .text-subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #94a3b8; }
-      .text-phase { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 22px; font-weight: bold; fill: #cbd5e1; letter-spacing: 2px; }
-      .text-dialogue { font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif; font-size: 14px; fill: #f8fafc; }
-      .text-dialogue-em { font-weight: bold; fill: #38bdf8; }
-      .text-dialogue-warn { font-weight: bold; fill: #ef4444; }
-      
-      .stroke-main { stroke: #cbd5e1; stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-      .stroke-heavy { stroke: #94a3b8; stroke-width: 6px; stroke-linecap: round; }
-      .fill-main { fill: #0f172a; stroke: #38bdf8; stroke-width: 2px; }
-      .fill-accent { fill: #38bdf8; }
-      .fill-glow { fill: #38bdf8; filter: drop-shadow(0 0 8px #38bdf8); }
-      .fill-glow-green { fill: #4ade80; filter: drop-shadow(0 0 8px #4ade80); }
-      
-      .bg-panel { fill: #1e293b; rx: 12px; }
-      
-      /* Conveyor belt dashed line animation */
-      .conveyor-belt { stroke: #475569; stroke-width: 8px; stroke-dasharray: 20 10; animation: moveBelt 3s linear infinite; }
-      
-      /* Fun Animations */
-      .float { animation: float 4s ease-in-out infinite; transform-box: fill-box; }
-      .pulse { animation: pulse 2s infinite; }
-      .move-box { animation: moveBox 8s linear infinite; }
-      .gears { animation: spin 4s linear infinite; }
-      .gears-reverse { animation: spinReverse 4s linear infinite; }
-      .look-around { animation: look 6s ease-in-out infinite; }
-      .arm-wave { animation: wave 3s ease-in-out infinite; }
-      .dash-anim { stroke-dasharray: 8; animation: dash 2s linear infinite; }
-      
-      @keyframes moveBelt { to { stroke-dashoffset: -60; } }
-      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-      @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-      @keyframes moveBox { 0% { transform: translateX(0); opacity: 0; } 10% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(650px); opacity: 0; } }
-      @keyframes spin { 100% { transform: rotate(360deg); } }
-      @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
-      @keyframes look { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } }
-      @keyframes wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(30deg); } }
-      @keyframes dash { to { stroke-dashoffset: -16; } }
+      .t-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #38bdf8; }
+      .t-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #94a3b8; }
+      .t-phase { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #cbd5e1; letter-spacing: 2px; }
+      .t-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #94a3b8; font-weight: 600; }
+      .t-talk { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #f1f5f9; }
+      .t-em { font-weight: bold; fill: #38bdf8; }
+      .t-warn { font-weight: bold; fill: #ef4444; }
+      .t-code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; fill: #38bdf8; font-weight: bold; }
+      .t-big-code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 14px; fill: #4ade80; font-weight: bold; }
+
+      .sk { stroke: #cbd5e1; stroke-width: 2.5px; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .sk-thin { stroke: #94a3b8; stroke-width: 1.5px; stroke-linecap: round; fill: none; }
+      .box { fill: #0f172a; stroke: #334155; stroke-width: 2px; }
+      .box-blue { fill: #0f172a; stroke: #38bdf8; stroke-width: 2px; }
+      .box-green { fill: #0f172a; stroke: #4ade80; stroke-width: 2px; }
+      .vault { fill: #1e293b; stroke: #475569; stroke-width: 2px; stroke-dasharray: 6 4; }
+
+      .belt { stroke: #475569; stroke-width: 6px; stroke-dasharray: 16 8; animation: beltMove 2s linear infinite; }
+      .blink { animation: blink 2s ease-in-out infinite; }
+      .gear1 { animation: spin 3s linear infinite; transform-origin: center; }
+      .gear2 { animation: spinR 3s linear infinite; transform-origin: center; }
+      .glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
+      .arrow-flow { stroke-dasharray: 6 4; animation: flowDash 1.5s linear infinite; }
+
+      @keyframes beltMove { to { stroke-dashoffset: -48; } }
+      @keyframes blink { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes spinR { to { transform: rotate(-360deg); } }
+      @keyframes glowPulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+      @keyframes flowDash { to { stroke-dashoffset: -20; } }
     </style>
-    
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#020617" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
   </defs>
 
-  <!-- Canvas -->
-  <rect width="1000" height="650" fill="url(#bgGradient)" rx="16" />
+  <!-- Background -->
+  <rect width="900" height="720" fill="url(#bg)" rx="16" />
+  <rect width="900" height="720" fill="none" stroke="#1e293b" stroke-width="2" rx="16" />
 
-  <!-- Header -->
-  <text x="500" y="50" class="text-title" text-anchor="middle">The SkillPointer AI Pipeline</text>
-  <text x="500" y="75" class="text-subtitle" text-anchor="middle">How OpenCode accesses 2,000+ skills instantly, without destroying your token limits.</text>
+  <!-- Title -->
+  <text x="450" y="42" class="t-title" text-anchor="middle">The SkillPointer Pipeline</text>
+  <text x="450" y="62" class="t-sub" text-anchor="middle">How your AI agent accesses 2,000+ skills without blowing up its context window</text>
 
-  <!-- ==========================================
-       PHASE 1: THE PROMPT
-       ========================================== -->
-  <text x="50" y="140" class="text-phase">1. INITIAL PROMPT</text>
-  <line x1="50" y1="150" x2="950" y2="150" stroke="#334155" stroke-width="2" />
+  <!-- ═══════════════════════ PHASE 1 ═══════════════════════ -->
+  <text x="40" y="110" class="t-phase">PHASE 1 — YOU ASK A QUESTION</text>
+  <line x1="40" y1="120" x2="860" y2="120" stroke="#334155" stroke-width="1" />
+
+  <!-- Stick figure user sitting at desk -->
+  <circle cx="90" cy="160" r="14" class="sk" />
+  <line x1="90" y1="174" x2="90" y2="210" class="sk" />
+  <path d="M 72 192 Q 90 182 108 188" class="sk" />
+  <path d="M 76 240 L 90 210 L 104 240" class="sk" />
+  <!-- Desk -->
+  <line x1="110" y1="200" x2="155" y2="200" stroke="#64748b" stroke-width="4" stroke-linecap="round" />
+  <line x1="130" y1="200" x2="130" y2="240" stroke="#64748b" stroke-width="3" />
+  <!-- Monitor -->
+  <rect x="115" y="175" width="30" height="22" rx="3" fill="#334155" stroke="#64748b" stroke-width="1.5" />
+  <rect x="118" y="178" width="24" height="14" rx="2" fill="#0f172a" />
+  <rect x="120" y="181" width="12" height="2" rx="1" fill="#38bdf8" class="blink" />
+  <rect x="120" y="185" width="18" height="2" rx="1" fill="#475569" />
+  <line x1="130" y1="197" x2="130" y2="200" stroke="#64748b" stroke-width="2" />
+
+  <!-- Speech bubble -->
+  <rect x="180" y="140" width="290" height="50" rx="10" class="box-blue" />
+  <polygon points="180,170 168,180 180,178" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+  <text x="325" y="162" class="t-talk" text-anchor="middle">"Build me a <tspan class="t-em">secure REST API</tspan></text>
+  <text x="325" y="178" class="t-talk" text-anchor="middle">with JWT auth and rate limiting"</text>
+
+  <!-- Arrow from prompt going right -->
+  <line x1="490" y1="165" x2="560" y2="165" stroke="#38bdf8" stroke-width="2" class="arrow-flow" />
+  <polygon points="555,160 565,165 555,170" fill="#38bdf8" />
+
+  <!-- The task package -->
+  <rect x="575" y="145" width="130" height="45" rx="8" class="box" />
+  <text x="640" y="165" class="t-talk t-warn" text-anchor="middle">Incoming Task</text>
+  <text x="640" y="180" class="t-label" text-anchor="middle">0 skills loaded yet</text>
+
+  <!-- funny label -->
+  <text x="640" y="210" class="t-label" text-anchor="middle" fill="#64748b" font-style="italic">(the AI has no idea what to do)</text>
+
+  <!-- Conveyor belt -->
+  <line x1="40" y1="250" x2="860" y2="250" class="belt" />
+  <text x="450" y="270" class="t-label" text-anchor="middle">— conveyor belt of tasks —</text>
+
+  <!-- ═══════════════════════ PHASE 2 ═══════════════════════ -->
+  <text x="40" y="320" class="t-phase">PHASE 2 — THE POINTER DOES ITS THING</text>
+  <line x1="40" y1="330" x2="860" y2="330" stroke="#334155" stroke-width="1" />
+
+  <!-- Pointer Card (big, prominent) -->
+  <rect x="60" y="355" width="200" height="100" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" />
+  <!-- Card content -->
+  <rect x="75" y="370" width="80" height="5" rx="2" fill="#ef4444" />
+  <text x="160" y="378" class="t-code" text-anchor="middle" fill="#0f172a" font-size="11px">SKILL POINTER</text>
+  <rect x="75" y="390" width="170" height="3" rx="1" fill="#cbd5e1" />
+  <rect x="75" y="400" width="140" height="3" rx="1" fill="#cbd5e1" />
+  <rect x="75" y="410" width="160" height="3" rx="1" fill="#cbd5e1" />
+  <text x="160" y="440" class="t-code" text-anchor="middle" fill="#475569" font-size="10px">backend-dev-category-pointer</text>
+
+  <!-- Arrow from card to robot -->
+  <line x1="270" y1="405" x2="330" y2="405" stroke="#38bdf8" stroke-width="2" class="arrow-flow" />
+  <polygon points="325,400 335,405 325,410" fill="#38bdf8" />
+
+  <!-- Robot AI reading the card -->
+  <rect x="355" y="370" width="35" height="30" rx="5" class="sk" />
+  <!-- Antenna -->
+  <line x1="372" y1="362" x2="372" y2="370" class="sk" />
+  <circle cx="372" cy="359" r="4" fill="#38bdf8" class="blink" />
+  <!-- Eyes -->
+  <circle cx="365" cy="385" r="3" fill="#38bdf8" />
+  <circle cx="380" cy="385" r="3" fill="#38bdf8" />
+  <!-- Mouth (happy) -->
+  <path d="M 364 392 Q 372 398 381 392" stroke="#38bdf8" stroke-width="1.5" fill="none" />
+  <!-- Body -->
+  <line x1="372" y1="400" x2="372" y2="440" class="sk" />
+  <!-- Arms -->
+  <path d="M 372 410 L 348 425" class="sk" />
+  <path d="M 372 410 L 396 425" class="sk" />
+  <!-- Legs -->
+  <path d="M 372 440 L 357 465" class="sk" />
+  <path d="M 372 440 L 387 465" class="sk" />
+
+  <!-- Speech bubble from robot -->
+  <rect x="420" y="350" width="420" height="55" rx="10" class="box-blue" />
+  <polygon points="420,385 408,395 420,393" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+  <text x="630" y="372" class="t-talk" text-anchor="middle">"This pointer says: <tspan class="t-em">Don't guess!</tspan> Go read the</text>
+  <text x="630" y="390" class="t-talk" text-anchor="middle">hidden vault at <tspan class="t-code">~/.opencode-skill-libraries/backend-dev/</tspan>"</text>
+
+  <!-- funny label -->
+  <text x="630" y="435" class="t-label" text-anchor="middle" fill="#64748b" font-style="italic">(the AI now knows exactly where to look)</text>
+
+  <!-- ═══════════════════════ PHASE 3 ═══════════════════════ -->
+  <text x="40" y="510" class="t-phase">PHASE 3 — GRAB THE SKILL, SHIP THE CODE</text>
+  <line x1="40" y1="520" x2="860" y2="520" stroke="#334155" stroke-width="1" />
+
+  <!-- The Hidden Vault -->
+  <rect x="40" y="545" width="220" height="110" rx="10" class="vault" />
+  <text x="150" y="568" class="t-code" text-anchor="middle">~/.opencode-skill-libraries/</text>
   
-  <g>
-    <!-- User (Stick figure) -->
-    <circle cx="130" cy="190" r="15" class="stroke-main" /> <!-- Head -->
-    <line x1="130" y1="205" x2="130" y2="240" class="stroke-main" /> <!-- Body -->
-    <path d="M 110 220 Q 130 210 150 215" class="stroke-main" /> <!-- Arms typing -->
-    <path d="M 115 270 L 130 240 L 140 270" class="stroke-main" /> <!-- Legs sitting -->
-    
-    <!-- Chair -->
-    <path d="M 105 235 L 120 235 L 120 260 L 120 270" stroke="#475569" stroke-width="4" fill="none" />
-    
-    <!-- Desk & Computer -->
-    <line x1="145" y1="230" x2="190" y2="230" class="stroke-heavy" /> <!-- Desk -->
-    <line x1="165" y1="230" x2="165" y2="270" class="stroke-heavy" /> <!-- Leg -->
-    <rect x="155" y="200" width="10" height="25" fill="#334155" transform="rotate(-15 155 200)" /> <!-- Monitor -->
-    
-    <!-- Speech Bubble -->
-    <path d="M 125 165 Q 110 150 130 135 L 300 135 Q 320 135 320 150 L 320 180 Q 320 195 300 195 L 150 195 Z" class="fill-main" />
-    <text x="225" y="165" class="text-dialogue" text-anchor="middle">"Hey AI! Build a secure REST API"</text>
-  </g>
-
-  <!-- The Heavy Prompt Box moving -->
-  <g class="move-box">
-    <rect x="100" y="160" width="120" height="80" rx="8" class="fill-main" />
-    <text x="160" y="195" class="text-dialogue text-dialogue-warn" text-anchor="middle">Heavy Task</text>
-    <text x="160" y="220" class="text-dialogue" text-anchor="middle" font-size="12px">0 Context Loaded</text>
-    <!-- Little wheels -->
-    <circle cx="120" cy="245" r="8" fill="#475569" class="gears" style="transform-origin: 120px 245px;" />
-    <circle cx="200" cy="245" r="8" fill="#475569" class="gears" style="transform-origin: 200px 245px;" />
-  </g>
-
-  <!-- Standard Conveyor Belt -->
-  <line x1="100" y1="250" x2="900" y2="250" class="conveyor-belt" />
-
-  <!-- ==========================================
-       PHASE 2: THE POINTER SCAN
-       ========================================== -->
-  <text x="50" y="330" class="text-phase">2. THE POINTER SCAN (Index Card)</text>
-  <line x1="50" y1="340" x2="950" y2="340" stroke="#334155" stroke-width="2" />
-
-  <g>
-    <!-- Robot (Square Head AI) -->
-    <rect x="470" y="370" width="30" height="25" rx="4" class="stroke-main" /> <!-- Head -->
-    <line x1="485" y1="360" x2="485" y2="370" class="stroke-main" /> <!-- Antenna -->
-    <circle cx="485" cy="358" r="3" class="fill-accent pulse" /> <!-- Antenna light -->
-    <!-- Eyes -->
-    <g class="look-around" style="transform-origin: 485px 382px;">
-      <circle cx="478" cy="382" r="2" fill="#38bdf8" />
-      <circle cx="492" cy="382" r="2" fill="#38bdf8" />
-    </g>
-    <line x1="485" y1="395" x2="485" y2="430" class="stroke-main" /> <!-- Body -->
-    
-    <!-- Arm holding the pointer card -->
-    <path d="M 485 405 Q 460 400 455 420" class="stroke-main" />
-    <!-- Arm pointing -->
-    <path d="M 485 405 Q 500 400 520 390" class="stroke-main arm-wave" style="transform-origin: 485px 405px;" />
-    
-    <path d="M 470 460 L 485 430 L 500 460" class="stroke-main" /> <!-- Legs -->
-
-    <!-- Tiny Pointer Card -->
-    <g transform="rotate(-15 445 420)">
-      <rect x="435" y="415" width="25" height="30" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" />
-      <line x1="438" y1="425" x2="450" y2="422" stroke="#ef4444" stroke-width="2" />
-      <line x1="440" y1="432" x2="455" y2="429" stroke="#94a3b8" stroke-width="1" />
-      <line x1="442" y1="438" x2="452" y2="436" stroke="#94a3b8" stroke-width="1" />
-    </g>
-
-    <!-- Speech Bubble -->
-    <path d="M 485 345 Q 495 330 510 325 L 800 325 Q 820 325 820 340 L 820 375 Q 820 390 800 390 L 510 390 Z" class="fill-main" />
-    <text x="665" y="355" class="text-dialogue" text-anchor="middle">"Ah! The <tspan class="text-dialogue-em">backend-pointer</tspan> says I shouldn't guess.</text>
-    <text x="665" y="375" class="text-dialogue" text-anchor="middle">The Map says: Go to the <tspan class="text-dialogue-em">Hidden Vault</tspan>!"</text>
-  </g>
-
-  <!-- ==========================================
-       PHASE 3: THE VAULT HEIST & EXECUTION
-       ========================================== -->
-  <text x="50" y="500" class="text-phase">3. VAULT EXTRACTION &amp; EXECUTION</text>
-  <line x1="50" y1="510" x2="950" y2="510" stroke="#334155" stroke-width="2" />
-
-  <!-- The Underground Vault -->
-  <g>
-    <rect x="100" y="530" width="280" height="90" class="bg-panel" stroke="#475569" stroke-width="3" stroke-dasharray="5 5" />
-    <text x="240" y="560" class="text-dialogue text-dialogue-em" text-anchor="middle">~/.opencode-skill-libraries/</text>
-    
-    <!-- Rows of unlit folders -->
-    <rect x="120" y="580" width="15" height="20" fill="#334155" />
-    <rect x="140" y="580" width="15" height="20" fill="#334155" />
-    <rect x="160" y="580" width="15" height="20" fill="#334155" />
-    <rect x="180" y="580" width="15" height="20" fill="#334155" />
-    <rect x="340" y="580" width="15" height="20" fill="#334155" />
-    <text x="270" y="595" class="text-dialogue" font-size="12px">...2,000 more...</text>
-    
-    <!-- The ONE glowing folder being extracted -->
-    <rect x="200" y="575" width="20" height="25" class="fill-glow pulse" stroke="#fff" stroke-width="1" />
-    <polyline points="210,570 210,545 250,545" stroke="#38bdf8" stroke-width="2" fill="none" stroke-dasharray="4" />
-    
-    <text x="310" y="550" class="text-dialogue" font-size="10px">Grab 1 Folder!</text>
-  </g>
-
-  <!-- AI Generating Code -->
-  <g>
-    <!-- Robot (Square Head AI) running -->
-    <rect x="520" y="530" width="30" height="25" rx="4" class="stroke-main" /> <!-- Head -->
-    <path d="M 535 535 L 545 535" stroke="#38bdf8" stroke-width="2" /> <!-- Sunglasses cool AI -->
-    <line x1="535" y1="555" x2="545" y2="585" class="stroke-main" /> <!-- Body leaning forward -->
-    <!-- Arms -->
-    <path d="M 540 565 Q 560 560 570 575" class="stroke-main" /> 
-    <!-- Legs running -->
-    <path d="M 545 585 L 530 610" class="stroke-main" /> 
-    <path d="M 545 585 L 565 610" class="stroke-main" /> 
-
-    <!-- Holding the glowing folder -->
-    <rect x="565" y="565" width="15" height="20" class="fill-glow" />
-
-    <!-- Code Production Machine -->
-    <rect x="630" y="530" width="100" height="85" class="fill-main" />
-    <text x="680" y="550" class="text-dialogue" text-anchor="middle" font-size="12px">LLM ENGINE</text>
-    <!-- Gears inside -->
-    <circle cx="660" cy="580" r="10" fill="#475569" class="gears" style="transform-origin: 660px 580px;" />
-    <circle cx="690" cy="575" r="15" fill="#334155" class="gears-reverse" style="transform-origin: 690px 575px;" />
-    
-    <!-- Beautiful Code dropping out -->
-    <g class="float">
-      <rect x="760" y="540" width="70" height="70" class="fill-glow-green" />
-      <line x1="765" y1="555" x2="810" y2="555" stroke="#0f172a" stroke-width="4" />
-      <line x1="765" y1="570" x2="820" y2="570" stroke="#0f172a" stroke-width="4" />
-      <line x1="765" y1="585" x2="790" y2="585" stroke="#0f172a" stroke-width="4" />
-      <text x="795" y="625" class="text-dialogue text-dialogue-em" text-anchor="middle">PERFECT CODE!</text>
-    </g>
-
-    <!-- Arrow from AI to Machine to Code -->
-    <path d="M 590 575 L 620 575" stroke="#38bdf8" stroke-width="3" fill="none" class="dash-anim" />
-    <polygon points="615,570 625,575 615,580" fill="#38bdf8" />
-
-    <path d="M 735 575 L 750 575" stroke="#4ade80" stroke-width="3" fill="none" class="dash-anim" />
-    <polygon points="745,570 755,575 745,580" fill="#4ade80" />
-  </g>
+  <!-- Folders (dark, dormant) -->
+  <rect x="55" y="585" width="18" height="22" rx="2" fill="#334155" stroke="#475569" stroke-width="1" />
+  <rect x="80" y="585" width="18" height="22" rx="2" fill="#334155" stroke="#475569" stroke-width="1" />
+  <!-- THE ONE glowing folder -->
+  <rect x="105" y="580" width="22" height="27" rx="3" fill="#38bdf8" stroke="#fff" stroke-width="1.5" class="glow-pulse" />
+  <text x="116" y="598" font-size="8" fill="#020617" text-anchor="middle" font-weight="bold">API</text>
   
+  <rect x="135" y="585" width="18" height="22" rx="2" fill="#334155" stroke="#475569" stroke-width="1" />
+  <rect x="160" y="585" width="18" height="22" rx="2" fill="#334155" stroke="#475569" stroke-width="1" />
+  <rect x="185" y="585" width="18" height="22" rx="2" fill="#334155" stroke="#475569" stroke-width="1" />
+  <rect x="210" y="585" width="18" height="22" rx="2" fill="#334155" stroke="#475569" stroke-width="1" />
+  <text x="150" y="645" class="t-label" text-anchor="middle">2,000+ skills sit here quietly</text>
+
+  <!-- Arrow from vault to LLM -->
+  <line x1="270" y1="595" x2="350" y2="595" stroke="#38bdf8" stroke-width="2" class="arrow-flow" />
+  <polygon points="345,590 355,595 345,600" fill="#38bdf8" />
+  <text x="310" y="585" class="t-label" text-anchor="middle" fill="#38bdf8">reads 1 file</text>
+
+  <!-- LLM Engine Box -->
+  <rect x="365" y="555" width="170" height="85" rx="12" class="box-blue" />
+  <text x="450" y="578" class="t-talk t-em" text-anchor="middle">LLM ENGINE</text>
+  <!-- Gears -->
+  <circle cx="420" cy="610" r="12" fill="#1e293b" stroke="#475569" stroke-width="2" class="gear1" style="transform-origin: 420px 610px;" />
+  <circle cx="455" cy="605" r="16" fill="#1e293b" stroke="#475569" stroke-width="2" class="gear2" style="transform-origin: 455px 605px;" />
+  <text x="450" y="630" class="t-label" text-anchor="middle" fill="#38bdf8">skill + prompt = magic</text>
+
+  <!-- Arrow from LLM to Output -->
+  <line x1="545" y1="595" x2="620" y2="595" stroke="#4ade80" stroke-width="2" class="arrow-flow" />
+  <polygon points="615,590 625,595 615,600" fill="#4ade80" />
+
+  <!-- Output: Beautiful Code -->
+  <rect x="640" y="555" width="200" height="85" rx="12" class="box-green" />
+  <text x="740" y="578" class="t-big-code" text-anchor="middle">PERFECT CODE</text>
+  <!-- Code lines -->
+  <rect x="660" y="590" width="80" height="4" rx="2" fill="#4ade80" opacity="0.8" />
+  <rect x="660" y="600" width="120" height="4" rx="2" fill="#4ade80" opacity="0.6" />
+  <rect x="660" y="610" width="60" height="4" rx="2" fill="#4ade80" opacity="0.5" />
+  <rect x="660" y="620" width="100" height="4" rx="2" fill="#4ade80" opacity="0.4" />
+  <text x="740" y="660" class="t-label" text-anchor="middle" fill="#4ade80" font-style="italic">secure, tested, production-ready</text>
+
+  <!-- Bottom tagline -->
+  <text x="450" y="705" class="t-sub" text-anchor="middle" fill="#64748b">Context used: ~85 tokens (pointer only) instead of ~120,000 tokens (all skills loaded)</text>
+
 </svg>

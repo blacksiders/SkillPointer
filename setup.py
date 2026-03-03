@@ -50,6 +50,7 @@ DOMAIN_HEURISTICS = {
     ],
     "code-review": [
         "code-review",
+        "code review",
         "codereview",
         "requesting-code-review",
         "code-review-excellence",
@@ -278,7 +279,14 @@ DOMAIN_HEURISTICS = {
         "autogen",
         "crewai",
     ],
-    "animation": ["gsap", "lottie", "keyframe", "transition", "tween", "rigging"],
+    "animation": [
+        "gsap",
+        "lottie",
+        "keyframe",
+        "transition",
+        "tween",
+        "rigging",
+    ],
     "architecture": [
         "pattern",
         "clean-code",
@@ -306,7 +314,15 @@ DOMAIN_HEURISTICS = {
         "nft",
         "staking",
     ],
-    "compliance": ["gdpr", "hipaa", "soc2", "audit", "policy", "legal", "privacy"],
+    "compliance": [
+        "gdpr",
+        "hipaa",
+        "soc2",
+        "audit",
+        "policy",
+        "legal",
+        "privacy",
+    ],
     "data-science": [
         "pandas",
         "numpy",
@@ -344,7 +360,12 @@ DOMAIN_HEURISTICS = {
         "funnel",
         "email-marketing",
     ],
-    "mcp": ["mcp-", "model-context-protocol", "server-", "client-"],
+    "mcp": [
+        "mcp-",
+        "model-context-protocol",
+        "server-",
+        "client-",
+    ],
     "media-production": [
         "video",
         "audio",
@@ -375,7 +396,13 @@ DOMAIN_HEURISTICS = {
         "prompt-",
         "meta-prompt",
     ],
-    "quantum": ["qubit", "qiskit", "quantum-", "superposition", "entanglement"],
+    "quantum": [
+        "qubit",
+        "qiskit",
+        "quantum-",
+        "superposition",
+        "entanglement",
+    ],
     "robotics": [
         "ros",
         "arduino",
@@ -385,8 +412,22 @@ DOMAIN_HEURISTICS = {
         "firmware",
         "robot",
     ],
-    "simulation": ["physics", "modeling", "sim-", "digital-twin", "solver"],
-    "testing": ["test-", "unit-test", "jest", "pytest", "cypress", "quality", "qa-"],
+    "simulation": [
+        "physics",
+        "modeling",
+        "sim-",
+        "digital-twin",
+        "solver",
+    ],
+    "testing": [
+        "test-",
+        "unit-test",
+        "jest",
+        "pytest",
+        "cypress",
+        "quality",
+        "qa-",
+    ],
     "tooling": [
         "cli",
         "prettier",
@@ -406,7 +447,13 @@ def print_banner():
 
 
 def get_category_for_skill(skill_name: str) -> str:
-    name_lower = skill_name.lower().replace("_", "-")
+    # Detect exact search within quotes
+    exact_match = False
+    if skill_name.startswith('"') and skill_name.endswith('"'):
+        exact_match = True
+        name_lower = skill_name[1:-1].strip().lower().replace("_", "-").replace(" ", "-")
+    else:
+        name_lower = skill_name.lower().replace("_", "-")
 
     has_pr_term = any(
         term in name_lower for term in ("pr-review", "pull-request", "merge-request")
@@ -415,8 +462,14 @@ def get_category_for_skill(skill_name: str) -> str:
         return "code-review"
 
     for category, keywords in DOMAIN_HEURISTICS.items():
-        if any(kw in name_lower for kw in keywords):
-            return category
+        if exact_match:
+            # Exact match: the full term must match one of the keywords
+            if name_lower in keywords:
+                return category
+        else:
+            # Substring match: a known keyword is contained within the term
+            if any(kw in name_lower for kw in keywords):
+                return category
     return "_uncategorized"
 
 

@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/skillpointer-architecture.svg" alt="SkillPointer Architecture" width="100%">
 
-  # SkillPointer 🎯
+  # SkillPointer <img src="assets/icons/icon-target.svg" width="36" height="36" align="center" alt="Target">
 
   **Infinite AI Context. Zero Token Tax.**
 
@@ -19,7 +19,7 @@ It works **with** the native skill system, not against it - using skills to opti
 
 ---
 
-## 🛑 The "Token Tax" Problem
+## <img src="assets/icons/icon-stop.svg" width="24" height="24" align="center" alt="Stop"> The "Token Tax" Problem
 
 AI agents like OpenCode and Claude Code use a [**3-level progressive disclosure**](https://opencode.ai/docs/skills) system to load skills:
 
@@ -35,9 +35,9 @@ With a large library this adds up fast:
 
 | Skills Installed | Level 1 Startup Cost | % of 200K Context Window |
 |---|---|---|
-| 50 skills | ~4,000 tokens | ~2% ✅ |
-| 500 skills | ~40,000 tokens | ~20% ⚠️ |
-| **2,000 skills** | **~80,000 tokens** | **~40%** 🛑 |
+| 50 skills | ~4,000 tokens | ~2% <img src="assets/icons/icon-check.svg" width="18" height="18" align="center" alt="Check"> |
+| 500 skills | ~40,000 tokens | ~20% <img src="assets/icons/icon-warning.svg" width="18" height="18" align="center" alt="Warning"> |
+| **2,000 skills** | **~80,000 tokens** | **~40%** <img src="assets/icons/icon-stop.svg" width="18" height="18" align="center" alt="Stop"> |
 
 * **It slows down AI response times** - the agent has to parse thousands of skill descriptions before reasoning.
 * **It inflates API costs** - ~80K tokens consumed every single prompt just listing skills.
@@ -49,7 +49,7 @@ With a large library this adds up fast:
 
 ---
 
-## ⚡ The Pointer Solution
+## <img src="assets/icons/icon-lightning.svg" width="24" height="24" align="center" alt="Lightning"> The Pointer Solution
 
 <div align="center">
   <img src="assets/skillpointer-pipeline.svg" alt="SkillPointer Pipeline Architecture" width="100%">
@@ -76,7 +76,7 @@ These numbers are from a live environment with 2,004 skills across 34 categories
 
 ---
 
-## 🚀 Installation & Setup
+## <img src="assets/icons/icon-rocket.svg" width="24" height="24" align="center" alt="Rocket"> Installation & Setup
 
 A zero-dependency Python script that converts your skills directory into a Hierarchical Pointer Architecture.
 
@@ -112,7 +112,7 @@ Watch the execution logs:
 
 ---
 
-## 🛠 Manual Implementation Guide
+## <img src="assets/icons/icon-tools.svg" width="24" height="24" align="center" alt="Tools"> Manual Implementation Guide
 
 If you prefer to set this up manually without the `setup.py` script:
 
@@ -122,7 +122,7 @@ If you prefer to set this up manually without the `setup.py` script:
 
 ---
 
-## ❓ FAQ
+## <img src="assets/icons/icon-question.svg" width="24" height="24" align="center" alt="FAQ"> FAQ
 
 <details>
 <summary><b>"Isn't this just the same as Claude/OpenCode skills?"</b></summary>
@@ -160,7 +160,7 @@ The native `skill()` tool loads a skill the AI already knows about (from Level 1
 
 ---
 
-## 📚 How It Works (Technical Details)
+## <img src="assets/icons/icon-books.svg" width="24" height="24" align="center" alt="Books"> How It Works (Technical Details)
 
 SkillPointer leverages the way AI agents handle skills, as documented by [OpenCode](https://opencode.ai/docs/skills) and [Claude Code](https://docs.anthropic.com/en/docs/claude-code/skills):
 

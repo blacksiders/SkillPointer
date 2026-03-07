@@ -512,7 +512,7 @@ def get_category_for_skill(skill_name: str) -> str:
             skill_name[1:-1].strip().lower().replace("_", "-").replace(" ", "-")
         )
     else:
-        name_lower = skill_name.lower().replace("_", "-")
+        name_lower = skill_name.lower().replace("_", "-").replace(" ", "-")
 
     # Phase 1: Prefix overrides (highest priority, zero ambiguity)
     for prefix, category in PREFIX_OVERRIDES.items():

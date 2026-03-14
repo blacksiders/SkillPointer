@@ -50,6 +50,8 @@ DOMAIN_HEURISTICS = {
         "security",
         "exploit",
         "encryption",
+        "vibesec",
+        "vibe-security",
     ],
     "code-review": [
         "code-review",
@@ -355,6 +357,9 @@ DOMAIN_HEURISTICS = {
         "datadog",
         "newrelic",
         "bugtracking",
+        "bug",
+        "bug-hunter",
+        "hunter",
     ],
     "education": [
         "learning",
@@ -411,6 +416,7 @@ DOMAIN_HEURISTICS = {
         "kotlin",
         "algorithm",
         "data-structure",
+        "mago",
     ],
     "prompt-engineering": [
         "system-prompt",
@@ -460,6 +466,30 @@ DOMAIN_HEURISTICS = {
         "pip",
         "extension",
         "plugin",
+        "find-skills",
+    ],
+    "documentation": [
+        "documentation",
+        "docstring",
+        "doc-",
+        "code-documenter",
+        "documenter",
+        "readme",
+        "api-docs",
+        "swagger",
+        "openapi",
+        "jsdoc",
+        "sphinx",
+    ],
+    "wordpress": [
+        "wordpress",
+        "wp-",
+        "generatepress",
+        "generateblocks",
+        "gutenberg",
+        "woocommerce",
+        "acf",
+        "wp-cli",
     ],
 }
 

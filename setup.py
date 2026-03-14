@@ -50,6 +50,8 @@ DOMAIN_HEURISTICS = {
         "security",
         "exploit",
         "encryption",
+        "vibesec",
+        "vibe-security",
     ],
     "code-review": [
         "code-review",
@@ -336,6 +338,29 @@ DOMAIN_HEURISTICS = {
         "data-",
         "etl",
     ],
+    "debug": [
+        "debug",
+        "debugging",
+        "breakpoint",
+        "logger",
+        "logging",
+        "trace",
+        "profiler",
+        "profiling",
+        "devtools",
+        "inspector",
+        "monitor",
+        "troubleshoot",
+        "diagnostic",
+        "error-tracking",
+        "sentry",
+        "datadog",
+        "newrelic",
+        "bugtracking",
+        "bug",
+        "bug-hunter",
+        "hunter",
+    ],
     "education": [
         "learning",
         "course",
@@ -391,6 +416,7 @@ DOMAIN_HEURISTICS = {
         "kotlin",
         "algorithm",
         "data-structure",
+        "mago",
     ],
     "prompt-engineering": [
         "system-prompt",
@@ -440,6 +466,30 @@ DOMAIN_HEURISTICS = {
         "pip",
         "extension",
         "plugin",
+        "find-skills",
+    ],
+    "documentation": [
+        "documentation",
+        "docstring",
+        "doc-",
+        "code-documenter",
+        "documenter",
+        "readme",
+        "api-docs",
+        "swagger",
+        "openapi",
+        "jsdoc",
+        "sphinx",
+    ],
+    "wordpress": [
+        "wordpress",
+        "wp-",
+        "generatepress",
+        "generateblocks",
+        "gutenberg",
+        "woocommerce",
+        "acf",
+        "wp-cli",
     ],
 }
 
@@ -454,7 +504,9 @@ def get_category_for_skill(skill_name: str) -> str:
     exact_match = False
     if skill_name.startswith('"') and skill_name.endswith('"'):
         exact_match = True
-        name_lower = skill_name[1:-1].strip().lower().replace("_", "-").replace(" ", "-")
+        name_lower = (
+            skill_name[1:-1].strip().lower().replace("_", "-").replace(" ", "-")
+        )
     else:
         name_lower = skill_name.lower().replace("_", "-")
 
@@ -523,9 +575,12 @@ def migrate_skills():
 
         dest = cat_dir / folder.name
         if dest.exists():
-            shutil.rmtree(dest)
+            if dest.is_symlink() or dest.is_file():
+                dest.unlink()
+            else:
+                shutil.rmtree(dest)
 
-        shutil.move(str(folder), str(cat_dir))
+        shutil.move(str(folder), str(dest))
 
         category_counts[category] = category_counts.get(category, 0) + 1
         moved_count += 1
@@ -625,15 +680,37 @@ This library contains {count} specialized skills covering various aspects of {ca
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="SkillPointer Setup - Infinite Context. Zero Token Tax.")
-    parser.add_argument("--agent", choices=["opencode", "claude"], default="opencode", 
-                        help="Target AI agent (opencode or claude)")
+
+    parser = argparse.ArgumentParser(
+        description="SkillPointer Setup - Infinite Context. Zero Token Tax."
+    )
+    parser.add_argument(
+        "--agent",
+        choices=["opencode", "claude"],
+        default="opencode",
+        help="Target AI agent (opencode or claude)",
+    )
+    parser.add_argument(
+        "--skill-dir",
+        type=str,
+        help="Directory to search for skills (overrides --agent default)",
+    )
+    parser.add_argument(
+        "--vault-dir",
+        type=str,
+        help="Directory to move skills to when creating pointers (overrides --agent default)",
+    )
     args, unknown = parser.parse_known_args()
 
     if args.agent == "claude":
         CONFIG["agent_name"] = "Claude Code"
         CONFIG["active_skills_dir"] = Path.home() / ".claude" / "skills"
         CONFIG["hidden_library_dir"] = Path.home() / ".skillpointer-vault"
+
+    if args.skill_dir:
+        CONFIG["active_skills_dir"] = Path(args.skill_dir).expanduser().resolve()
+    if args.vault_dir:
+        CONFIG["hidden_library_dir"] = Path(args.vault_dir).expanduser().resolve()
 
     # Handle 'install' argument for compatibility with Install.bat/vbs
     if unknown and unknown[0] == "install":

@@ -83,9 +83,7 @@ A zero-dependency Python script that converts your skills directory into a Hiera
 ### Step 1: Run the Setup Script
 Download and run `setup.py`. It automatically categorizes your skills into expert domains (e.g., `ai-ml`, `security`, `frontend`, `automation`) using a keyword heuristic engine.
 
-By default, the script targets OpenCode. You can specify Claude Code using the `--agent` flag:
-
-**For OpenCode:**
+**For OpenCode (default):**
 ```bash
 python setup.py
 # Targets: ~/.config/opencode/skills
@@ -98,6 +96,28 @@ python setup.py --agent claude
 # Targets: ~/.claude/skills
 # Vault: ~/.skillpointer-vault
 ```
+
+**Custom Directories:**
+```bash
+python setup.py --skill-dir ~/.agents/skills --vault-dir ~/.skillpointer-vault
+```
+
+**Preview Changes (Dry Run):**
+```bash
+python setup.py --dry-run
+```
+
+### CLI Options
+
+| Option | Description |
+|--------|-------------|
+| `--agent {opencode,claude}` | Target AI agent (default: opencode) |
+| `--skill-dir PATH` | Custom skills directory (overrides --agent) |
+| `--vault-dir PATH` | Custom vault directory (overrides --agent) |
+| `--dry-run` | Preview changes without making them |
+| `--version` | Show version number |
+| `--help` | Show help message |
+
 *(Note for Claude Code: The `.skillpointer-vault` directory is intentionally prefixed with a dot so Claude's aggressive file scanner natively skips it during Level 1 context hydration).*
 
 ### Step 2: Test It!
@@ -170,6 +190,31 @@ SkillPointer leverages the way AI agents handle skills, as documented by [OpenCo
 4. **At runtime**, the AI matches a pointer, reads its body, follows the instructions, and retrieves exactly the skill it needs from the vault.
 
 No custom tools, no plugins, no API calls. Just smart organization of native skills.
+
+---
+
+## 🧪 Development & Testing
+
+Run the test suite:
+
+```bash
+# Create virtual environment
+uv venv .venv && source .venv/bin/activate
+
+# Install dev dependencies
+uv pip install pytest
+
+# Run tests
+python -m pytest tests/ -v
+```
+
+Run linting and type checking:
+
+```bash
+uv pip install ruff mypy
+ruff check setup.py
+mypy setup.py
+```
 
 ---
 

@@ -1,16 +1,33 @@
-import os
+#!/usr/bin/env python3
+"""
+SkillPointer - Infinite AI Context. Zero Token Tax.
+
+A tool that reorganizes AI agent skills into a hierarchical pointer architecture
+to minimize startup token costs while maintaining full skill accessibility.
+"""
+
+from __future__ import annotations
+
 import shutil
 import sys
-import time
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
+
+__version__ = "1.1.0"
+__all__ = ["main", "get_category_for_skill"]
 
 # ==========================================
-# 🎯 SkillPointer
-# Infinite Context. Zero Token Tax.
+# Constants
 # ==========================================
+
+PROGRESS_LOG_THRESHOLD = 5
+BATCH_PROGRESS_INTERVAL = 50
 
 
 class Colors:
+    """ANSI color codes for terminal output."""
+
     HEADER = "\033[95m"
     BLUE = "\033[94m"
     CYAN = "\033[96m"
@@ -21,15 +38,34 @@ class Colors:
     BOLD = "\033[1m"
 
 
-# Global configuration state
-CONFIG = {
-    "agent_name": "OpenCode",
-    "active_skills_dir": Path.home() / ".config" / "opencode" / "skills",
-    "hidden_library_dir": Path.home() / ".opencode-skill-libraries",
-}
+# ==========================================
+# Configuration
+# ==========================================
 
-# Advanced Heuristic Engine for Universal Categorization
-DOMAIN_HEURISTICS = {
+
+@dataclass
+class Config:
+    """Runtime configuration for SkillPointer."""
+
+    agent_name: str = "OpenCode"
+    active_skills_dir: Path = field(
+        default_factory=lambda: Path.home() / ".config" / "opencode" / "skills"
+    )
+    hidden_library_dir: Path = field(
+        default_factory=lambda: Path.home() / ".opencode-skill-libraries"
+    )
+    dry_run: bool = False
+
+    def validate(self) -> bool:
+        """Validate configuration paths exist and are directories."""
+        return self.active_skills_dir.is_dir()
+
+
+# ==========================================
+# Domain Heuristics
+# ==========================================
+
+DOMAIN_HEURISTICS: dict[str, list[str]] = {
     "security": [
         "attack",
         "injection",
@@ -493,14 +529,39 @@ DOMAIN_HEURISTICS = {
     ],
 }
 
+# Precomputed keyword lookup for O(1) category matching
+_KEYWORD_LOOKUP: dict[str, str] = {
+    kw: cat for cat, kws in DOMAIN_HEURISTICS.items() for kw in kws
+}
 
-def print_banner():
-    print(f"\n{Colors.BOLD}{Colors.CYAN}    🎯 SkillPointer {Colors.ENDC}")
+
+# ==========================================
+# Core Functions
+# ==========================================
+
+
+def print_banner() -> None:
+    """Display the SkillPointer banner."""
+    print(
+        f"\n{Colors.BOLD}{Colors.CYAN}    🎯 SkillPointer v{__version__}{Colors.ENDC}"
+    )
     print(f"{Colors.BLUE}    Infinite Context. Zero Token Tax.\n{Colors.ENDC}")
 
 
 def get_category_for_skill(skill_name: str) -> str:
-    # Detect exact search within quotes
+    """
+    Determine the category for a skill based on its name.
+
+    Uses keyword matching against the DOMAIN_HEURISTICS dictionary.
+    Supports exact matching (when name is wrapped in quotes) and
+    substring matching (default).
+
+    Args:
+        skill_name: The name of the skill folder.
+
+    Returns:
+        The category name, or "_uncategorized" if no match found.
+    """
     exact_match = False
     if skill_name.startswith('"') and skill_name.endswith('"'):
         exact_match = True
@@ -510,28 +571,39 @@ def get_category_for_skill(skill_name: str) -> str:
     else:
         name_lower = skill_name.lower().replace("_", "-")
 
+    # Special handling for PR-related code reviews
     has_pr_term = any(
         term in name_lower for term in ("pr-review", "pull-request", "merge-request")
     )
     if "review" in name_lower and has_pr_term:
         return "code-review"
 
-    for category, keywords in DOMAIN_HEURISTICS.items():
-        if exact_match:
-            # Exact match: the full term must match one of the keywords
-            if name_lower in keywords:
+    if exact_match:
+        # Exact match: the full term must be in our keyword lookup
+        if name_lower in _KEYWORD_LOOKUP:
+            return _KEYWORD_LOOKUP[name_lower]
+    else:
+        # Substring match: check if any keyword is contained in the name
+        for keyword, category in _KEYWORD_LOOKUP.items():
+            if keyword in name_lower:
                 return category
-        else:
-            # Substring match: a known keyword is contained within the term
-            if any(kw in name_lower for kw in keywords):
-                return category
+
     return "_uncategorized"
 
 
-def setup_directories():
-    agent_name = CONFIG["agent_name"]
-    active_skills_dir = CONFIG["active_skills_dir"]
-    hidden_library_dir = CONFIG["hidden_library_dir"]
+def setup_directories(config: Config) -> bool:
+    """
+    Validate and create necessary directories.
+
+    Args:
+        config: The runtime configuration.
+
+    Returns:
+        True if setup successful, False otherwise.
+    """
+    agent_name = config.agent_name
+    active_skills_dir = config.active_skills_dir
+    hidden_library_dir = config.hidden_library_dir
 
     if not active_skills_dir.exists():
         print(
@@ -542,21 +614,60 @@ def setup_directories():
         )
         return False
 
-    hidden_library_dir.mkdir(parents=True, exist_ok=True)
+    if not active_skills_dir.is_dir():
+        print(
+            f"{Colors.FAIL}✖ Error: {active_skills_dir} is not a directory.{Colors.ENDC}"
+        )
+        return False
+
+    try:
+        hidden_library_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        print(
+            f"{Colors.FAIL}✖ Error: Permission denied creating vault at {hidden_library_dir}{Colors.ENDC}"
+        )
+        return False
+    except OSError as e:
+        print(
+            f"{Colors.FAIL}✖ Error: Could not create vault directory: {e}{Colors.ENDC}"
+        )
+        return False
+
     return True
 
 
-def migrate_skills():
-    active_skills_dir = CONFIG["active_skills_dir"]
-    hidden_library_dir = CONFIG["hidden_library_dir"]
+def migrate_skills(config: Config) -> dict[str, int]:
+    """
+    Move skills from active directory to categorized vault.
 
-    print(f"{Colors.BOLD}📦 Phase 1: Analyzing and Migrating Skills...{Colors.ENDC}\n")
+    Args:
+        config: The runtime configuration.
 
-    category_counts = {}
+    Returns:
+        Dictionary mapping category names to counts of migrated skills.
+    """
+    active_skills_dir = config.active_skills_dir
+    hidden_library_dir = config.hidden_library_dir
+    dry_run = config.dry_run
+
+    action = "Would migrate" if dry_run else "Migrating"
+    print(f"{Colors.BOLD}📦 Phase 1: {action} Skills...{Colors.ENDC}\n")
+
+    category_counts: dict[str, int] = {}
     moved_count = 0
     pointer_count = 0
+    errors: list[str] = []
 
-    for folder in list(active_skills_dir.iterdir()):
+    # Snapshot directory listing to avoid modification during iteration
+    try:
+        folders = list(active_skills_dir.iterdir())
+    except PermissionError:
+        print(
+            f"{Colors.FAIL}✖ Error: Permission denied reading {active_skills_dir}{Colors.ENDC}"
+        )
+        return category_counts
+
+    for folder in folders:
         if not folder.is_dir():
             continue
 
@@ -565,49 +676,109 @@ def migrate_skills():
             pointer_count += 1
             continue
 
-        # Ignore empty folders
-        if not any(folder.iterdir()):
+        # Ignore empty folders (with error handling)
+        try:
+            if not any(folder.iterdir()):
+                continue
+        except PermissionError:
+            print(
+                f"{Colors.WARNING}⚠ Skipping {folder.name} (permission denied){Colors.ENDC}"
+            )
             continue
 
         category = get_category_for_skill(folder.name)
         cat_dir = hidden_library_dir / category
-        cat_dir.mkdir(parents=True, exist_ok=True)
+
+        if not dry_run:
+            try:
+                cat_dir.mkdir(parents=True, exist_ok=True)
+            except PermissionError:
+                errors.append(f"Permission denied creating {cat_dir}")
+                continue
 
         dest = cat_dir / folder.name
-        if dest.exists():
-            if dest.is_symlink() or dest.is_file():
-                dest.unlink()
-            else:
-                shutil.rmtree(dest)
 
-        shutil.move(str(folder), str(dest))
+        if dest.exists():
+            if dry_run:
+                print(
+                    f"{Colors.WARNING}  ⚠ Would replace existing: {dest}{Colors.ENDC}"
+                )
+            else:
+                try:
+                    if dest.is_symlink() or dest.is_file():
+                        dest.unlink()
+                    else:
+                        shutil.rmtree(dest)
+                except (OSError, PermissionError) as e:
+                    errors.append(f"Could not remove {dest}: {e}")
+                    continue
+
+        if dry_run:
+            print(
+                f"{Colors.GREEN}  ↳ Would map '{folder.name}' ➔ {category}/{Colors.ENDC}"
+            )
+        else:
+            try:
+                shutil.move(str(folder), str(dest))
+            except (OSError, shutil.Error) as e:
+                errors.append(f"Could not move {folder.name}: {e}")
+                continue
 
         category_counts[category] = category_counts.get(category, 0) + 1
         moved_count += 1
 
-        # Visually print a few for effect, but not all to avoid spam
-        if moved_count <= 5 or moved_count % 50 == 0:
+        # Progress logging
+        if (
+            moved_count <= PROGRESS_LOG_THRESHOLD
+            or moved_count % BATCH_PROGRESS_INTERVAL == 0
+        ):
             print(
                 f"{Colors.GREEN}  ↳ Mapped '{folder.name}' ➔ {category}/{Colors.ENDC}"
             )
 
-    if moved_count > 5:
+    if moved_count > PROGRESS_LOG_THRESHOLD:
+        remaining = moved_count - PROGRESS_LOG_THRESHOLD
+        if moved_count % BATCH_PROGRESS_INTERVAL != 0:
+            print(
+                f"{Colors.GREEN}  ...and {remaining} more skills safely migrated.{Colors.ENDC}"
+            )
+
+    if errors:
+        print(f"\n{Colors.WARNING}⚠ Encountered {len(errors)} error(s):{Colors.ENDC}")
+        for error in errors[:5]:
+            print(f"{Colors.WARNING}  - {error}{Colors.ENDC}")
+        if len(errors) > 5:
+            print(
+                f"{Colors.WARNING}  ...and {len(errors) - 5} more errors.{Colors.ENDC}"
+            )
+
+    if dry_run:
         print(
-            f"{Colors.GREEN}  ...and {moved_count - 5} more skills safely migrated.{Colors.ENDC}"
+            f"\n{Colors.BLUE}✔ Would migrate {moved_count} skills to {hidden_library_dir}{Colors.ENDC}\n"
+        )
+    else:
+        print(
+            f"\n{Colors.BLUE}✔ Successfully migrated {moved_count} raw skills into the hidden vault at {hidden_library_dir}{Colors.ENDC}\n"
         )
 
-    print(
-        f"\n{Colors.BLUE}✔ Successfully migrated {moved_count} raw skills into the hidden vault at {hidden_library_dir}{Colors.ENDC}\n"
-    )
     return category_counts
 
 
-def generate_pointers(category_counts):
-    active_skills_dir = CONFIG["active_skills_dir"]
-    hidden_library_dir = CONFIG["hidden_library_dir"]
+def generate_pointers(config: Config, category_counts: dict[str, int]) -> None:
+    """
+    Create category pointer skills in the active directory.
 
+    Args:
+        config: The runtime configuration.
+        category_counts: Dictionary of category names to skill counts.
+    """
+    active_skills_dir = config.active_skills_dir
+    hidden_library_dir = config.hidden_library_dir
+    dry_run = config.dry_run
+
+    action = "Would generate" if dry_run else "Generating"
     print(
-        f"{Colors.BOLD}⚡ Phase 2: Generating Dynamic Category Pointers...{Colors.ENDC}\n"
+        f"{Colors.BOLD}⚡ Phase 2: {action} Dynamic Category Pointers...{Colors.ENDC}\n"
     )
 
     pointer_template = """---
@@ -636,15 +807,27 @@ This library contains {count} specialized skills covering various aspects of {ca
     created_pointers = 0
     total_skills_indexed = 0
 
-    # We will scan the hidden_library_dir completely to ensure we include skills added previously or manually
-    for cat_dir in hidden_library_dir.iterdir():
+    try:
+        cat_dirs = list(hidden_library_dir.iterdir())
+    except PermissionError:
+        print(
+            f"{Colors.FAIL}✖ Error: Permission denied reading {hidden_library_dir}{Colors.ENDC}"
+        )
+        return
+
+    for cat_dir in cat_dirs:
         if not cat_dir.is_dir():
             continue
 
         cat = cat_dir.name
 
         # Count actual SKILL.md files inside
-        count = sum(1 for p in cat_dir.rglob("SKILL.md"))
+        try:
+            count = sum(1 for _ in cat_dir.rglob("SKILL.md"))
+        except PermissionError:
+            print(f"{Colors.WARNING}⚠ Skipping {cat} (permission denied){Colors.ENDC}")
+            continue
+
         if count == 0:
             continue
 
@@ -652,7 +835,21 @@ This library contains {count} specialized skills covering various aspects of {ca
 
         pointer_name = f"{cat}-category-pointer"
         pointer_dir = active_skills_dir / pointer_name
-        pointer_dir.mkdir(parents=True, exist_ok=True)
+
+        if dry_run:
+            print(
+                f"{Colors.CYAN}  ⊕ Would create {pointer_name} ➔ Indexes {count} skills.{Colors.ENDC}"
+            )
+            created_pointers += 1
+            continue
+
+        try:
+            pointer_dir.mkdir(parents=True, exist_ok=True)
+        except PermissionError:
+            print(
+                f"{Colors.WARNING}⚠ Could not create {pointer_dir} (permission denied){Colors.ENDC}"
+            )
+            continue
 
         cat_title = cat.replace("-", " ").title()
 
@@ -660,35 +857,60 @@ This library contains {count} specialized skills covering various aspects of {ca
             category_name=cat,
             category_title=cat_title,
             count=count,
-            library_path=str(cat_dir.absolute()).replace(
-                "\\", "/"
-            ),  # Ensure cross-platform path format in markdown
+            library_path=cat_dir.absolute().as_posix(),
         )
 
-        with open(pointer_dir / "SKILL.md", "w", encoding="utf-8") as f:
-            f.write(content)
+        try:
+            with open(pointer_dir / "SKILL.md", "w", encoding="utf-8") as f:
+                f.write(content)
+        except (OSError, PermissionError) as e:
+            print(
+                f"{Colors.WARNING}⚠ Could not write {pointer_dir / 'SKILL.md'}: {e}{Colors.ENDC}"
+            )
+            continue
 
         created_pointers += 1
         print(
             f"{Colors.CYAN}  ⊕ Created {pointer_name} ➔ Indexes {count} skills.{Colors.ENDC}"
         )
 
-    print(
-        f"\n{Colors.BLUE}✔ Successfully generated {created_pointers} ultra-lightweight pointers indexing {total_skills_indexed} total skills.{Colors.ENDC}"
-    )
+    if dry_run:
+        print(
+            f"\n{Colors.BLUE}✔ Would generate {created_pointers} pointers indexing {total_skills_indexed} total skills.{Colors.ENDC}"
+        )
+    else:
+        print(
+            f"\n{Colors.BLUE}✔ Successfully generated {created_pointers} ultra-lightweight pointers indexing {total_skills_indexed} total skills.{Colors.ENDC}"
+        )
 
 
-def main():
+def parse_args(argv: list[str] | None = None) -> tuple[Config, list[str]]:
+    """
+    Parse command-line arguments and return configuration.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv).
+
+    Returns:
+        Tuple of (Config, unknown_args).
+    """
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="SkillPointer Setup - Infinite Context. Zero Token Tax."
+        description="SkillPointer Setup - Infinite Context. Zero Token Tax.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s --agent claude
+  %(prog)s --skill-dir ~/.agents/skills --vault-dir ~/.skillpointer-vault
+  %(prog)s --dry-run
+        """,
     )
     parser.add_argument(
         "--agent",
         choices=["opencode", "claude"],
         default="opencode",
-        help="Target AI agent (opencode or claude)",
+        help="Target AI agent (default: opencode)",
     )
     parser.add_argument(
         "--skill-dir",
@@ -700,50 +922,110 @@ def main():
         type=str,
         help="Directory to move skills to when creating pointers (overrides --agent default)",
     )
-    args, unknown = parser.parse_known_args()
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Preview changes without making them",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"SkillPointer v{__version__}",
+    )
+
+    args, unknown = parser.parse_known_args(argv)
+
+    config = Config()
 
     if args.agent == "claude":
-        CONFIG["agent_name"] = "Claude Code"
-        CONFIG["active_skills_dir"] = Path.home() / ".claude" / "skills"
-        CONFIG["hidden_library_dir"] = Path.home() / ".skillpointer-vault"
+        config.agent_name = "Claude Code"
+        config.active_skills_dir = Path.home() / ".claude" / "skills"
+        config.hidden_library_dir = Path.home() / ".skillpointer-vault"
 
     if args.skill_dir:
-        CONFIG["active_skills_dir"] = Path(args.skill_dir).expanduser().resolve()
+        skill_dir = Path(args.skill_dir).expanduser().resolve()
+        if not skill_dir.exists():
+            print(
+                f"{Colors.FAIL}✖ Error: --skill-dir path does not exist: {skill_dir}{Colors.ENDC}"
+            )
+            sys.exit(1)
+        if not skill_dir.is_dir():
+            print(
+                f"{Colors.FAIL}✖ Error: --skill-dir is not a directory: {skill_dir}{Colors.ENDC}"
+            )
+            sys.exit(1)
+        config.active_skills_dir = skill_dir
+
     if args.vault_dir:
-        CONFIG["hidden_library_dir"] = Path(args.vault_dir).expanduser().resolve()
+        vault_dir = Path(args.vault_dir).expanduser().resolve()
+        config.hidden_library_dir = vault_dir
+
+    if args.dry_run:
+        config.dry_run = True
+
+    return config, unknown
+
+
+def main(argv: list[str] | None = None) -> int:
+    """
+    Main entry point for SkillPointer.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv).
+
+    Returns:
+        Exit code (0 for success, non-zero for failure).
+    """
+    config, unknown = parse_args(argv)
 
     # Handle 'install' argument for compatibility with Install.bat/vbs
-    if unknown and unknown[0] == "install":
+    if unknown and len(unknown) > 0 and unknown[0] == "install":
         pass
 
-    print_banner()
-    if not setup_directories():
-        return
+    if config.dry_run:
+        print(
+            f"{Colors.WARNING}🔍 DRY RUN MODE - No changes will be made{Colors.ENDC}\n"
+        )
 
-    time.sleep(1)
-    category_counts = migrate_skills()
-    time.sleep(1)
-    generate_pointers(category_counts)
+    print_banner()
+
+    if not setup_directories(config):
+        return 1
+
+    category_counts = migrate_skills(config)
+    generate_pointers(config, category_counts)
 
     print(
         f"\n{Colors.BOLD}{Colors.GREEN}=========================================={Colors.ENDC}"
     )
-    print(
-        f"{Colors.BOLD}{Colors.GREEN}✨ Setup Complete! Your AI is now optimized. ✨{Colors.ENDC}"
-    )
-    print(
-        f"{Colors.BOLD}{Colors.GREEN}=========================================={Colors.ENDC}"
-    )
-    print(f"Your active skills directory now only contains optimized Pointers.")
-    print(
-        "When you prompt your AI, its context window will be completely empty, but it will dynamically fetch from your massive library exactly when needed."
-    )
+    if config.dry_run:
+        print(f"{Colors.BOLD}{Colors.GREEN}✨ Dry Run Complete! ✨{Colors.ENDC}")
+        print(
+            f"{Colors.BOLD}{Colors.GREEN}=========================================={Colors.ENDC}"
+        )
+        print("Run without --dry-run to apply these changes.")
+    else:
+        print(
+            f"{Colors.BOLD}{Colors.GREEN}✨ Setup Complete! Your AI is now optimized. ✨{Colors.ENDC}"
+        )
+        print(
+            f"{Colors.BOLD}{Colors.GREEN}=========================================={Colors.ENDC}"
+        )
+        print("Your active skills directory now only contains optimized Pointers.")
+        print(
+            "When you prompt your AI, its context window will be completely empty, "
+            "but it will dynamically fetch from your massive library exactly when needed."
+        )
+
+    return 0
 
 
 if __name__ == "__main__":
     try:
-        main()
+        sys.exit(main())
     except KeyboardInterrupt:
         print(f"\n{Colors.WARNING}Setup cancelled by user.{Colors.ENDC}")
+        sys.exit(130)
     except Exception as e:
         print(f"\n{Colors.FAIL}An unexpected error occurred: {e}{Colors.ENDC}")
+        sys.exit(1)

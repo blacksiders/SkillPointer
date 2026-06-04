@@ -642,9 +642,12 @@ def execute_migration(plan):
 
         dest = cat_dir / folder.name
         if dest.exists():
-            shutil.rmtree(dest)
+            if dest.is_symlink() or dest.is_file():
+                dest.unlink()
+            else:
+                shutil.rmtree(dest)
 
-        shutil.move(str(folder), str(cat_dir))
+        shutil.move(str(folder), str(dest))
         moved_count += 1
 
         # Visually print a few for effect, but not all to avoid spam

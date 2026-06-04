@@ -584,6 +584,42 @@ def print_migration_summary(plan, category_counts):
     print()
 
 
+def print_migration_detail(plan):
+    """Print the full skill -> category mapping, grouped by category.
+
+    Read-only; used by --dry-run so the user can verify categorization before the
+    destructive move. `_uncategorized` is forced last and highlighted.
+    """
+    if not plan:
+        return
+
+    hidden_library_dir = CONFIG["hidden_library_dir"]
+
+    # Group skill names by category without mutating the passed-in plan.
+    by_category = {}
+    for folder, category in plan:
+        by_category.setdefault(category, []).append(folder.name)
+
+    # Alphabetical, but always show the catch-all bucket last.
+    categories = sorted(by_category, key=lambda c: (c == "_uncategorized", c))
+
+    print(f"{Colors.BOLD}🔎 Detailed mapping{Colors.ENDC}\n")
+    for category in categories:
+        skills = sorted(by_category[category])
+        dest = hidden_library_dir / category
+        if category == "_uncategorized":
+            print(
+                f"  {Colors.WARNING}{category} ({len(skills)}){Colors.ENDC} "
+                f"➔ {dest}/  "
+                f"{Colors.WARNING}(matched no keyword — review these){Colors.ENDC}"
+            )
+        else:
+            print(f"  {Colors.CYAN}{category} ({len(skills)}){Colors.ENDC} ➔ {dest}/")
+        for name in skills:
+            print(f"      - {name}")
+        print()
+
+
 def confirm(prompt):
     """Prompt for a y/N confirmation. Returns True only on an affirmative answer."""
     try:
@@ -809,12 +845,8 @@ def main():
     print_migration_summary(plan, category_counts)
 
     if args.dry_run:
-        if plan:
-            categories = ", ".join(sorted(category_counts))
-            print(
-                f"{Colors.CYAN}Pointers that would be generated: {categories}{Colors.ENDC}"
-            )
-        print(f"\n{Colors.BOLD}Dry run - no changes made.{Colors.ENDC}")
+        print_migration_detail(plan)
+        print(f"{Colors.BOLD}Dry run - no changes made.{Colors.ENDC}")
         return 0
 
     if not plan:

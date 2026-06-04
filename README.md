@@ -100,6 +100,26 @@ python setup.py --agent claude
 ```
 *(Note for Claude Code: The `.skillpointer-vault` directory is intentionally prefixed with a dot so Claude's aggressive file scanner natively skips it during Level 1 context hydration).*
 
+**Custom paths:**
+The `--agent` presets are just defaults. Point the script at any skills directory and vault you like — for example, if you keep skills in a universal, agent-agnostic location:
+```bash
+python setup.py --skills-dir ~/.agents/skills --vault-dir ~/.my-vault
+```
+Explicit `--skills-dir` / `--vault-dir` override the `--agent` preset defaults.
+
+**Options:**
+
+| Flag | Description |
+|---|---|
+| `--agent {opencode,claude}` | Base preset providing default paths (default: `opencode`). |
+| `--skills-dir PATH` | Active skills directory to reorganize (overrides the preset). |
+| `--vault-dir PATH` | Hidden vault directory to move raw skills into (overrides the preset). |
+| `-n`, `--dry-run` | Show what would happen without moving or writing anything. |
+| `-f`, `--force` / `-y`, `--yes` | Skip the confirmation prompt before migrating. |
+| `--no-color` | Disable colored output. |
+
+> The migration **moves** your skill folders. Run with `--dry-run` first to preview the plan; the script confirms before making any changes unless you pass `--force`.
+
 ### Step 2: Test It!
 Start your AI agent and ask it to fetch a specific skill:
 > *"I want to create a CSS button. Please consult your `web-dev-category-pointer` first to find the exact best practice from your library before writing the code."*
